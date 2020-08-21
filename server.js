@@ -1,4 +1,5 @@
 import { createServer } from "http";
+// @ts-ignore
 import { app } from "./app.mjs";
 
 const port = process.env.PORT || 3000;
