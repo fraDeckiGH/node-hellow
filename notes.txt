@@ -1,3 +1,20 @@
-run with:
 
-node server.js
+-- how to run this server --
+
+node server.js (default)
+
+
+using scripts (see: package.json):
+
+npm start
+
+
+
+
+
+
+
+
+
+
+
