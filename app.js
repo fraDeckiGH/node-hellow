@@ -1,4 +1,3 @@
-import bodyParser from 'body-parser';
 import express from 'express';
 import morgan from 'morgan';
 import { orderRoutes } from './api/routes/orders.js';
@@ -9,11 +8,14 @@ const app = express();
 
 
 
-// these middlewares belong only belong before the routes
+// these middlewares only belong before the routes
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-
+// TODO ero rimasto qui, capire se vale la pena scrivere + roba
+// in un unico app.use e testare che funzioni ancora
+app.use(
+	express.json(), 
+	express.urlencoded({ extended: false })
+);
 
 // morgan needs to intercept api requests to work
 // hence is "used" before the routes
