@@ -10,16 +10,17 @@ const app = express();
 
 // these middlewares only belong before the routes
 
-// TODO ero rimasto qui, capire se vale la pena scrivere + roba
-// in un unico app.use e testare che funzioni ancora
 app.use(
 	express.json(), 
-	express.urlencoded({ extended: false })
+	express.urlencoded({ extended: false }),
+	// morgan needs to intercept api requests to work
+	// hence is "used" before the routes
+	morgan("dev")
 );
 
 // morgan needs to intercept api requests to work
 // hence is "used" before the routes
-app.use(morgan("dev"));
+// app.use(morgan("dev"));
 
 
 // explained in e05p2 (2nd part)
@@ -46,7 +47,7 @@ app.use((req, res, next) => {
 
 
 
-// --------------- Routes ----------------------
+// ---------------------- Routes ----------------------
 // routes which should handle requests
 
 app.use("/products", productRoutes);
