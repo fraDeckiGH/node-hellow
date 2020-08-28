@@ -13,6 +13,7 @@ const app = express();
 app.use(
 	express.json(), 
 	express.urlencoded({ extended: false }),
+	
 	// morgan needs to intercept api requests to work
 	// hence is "used" before the routes
 	morgan("dev")
