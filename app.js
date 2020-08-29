@@ -1,11 +1,12 @@
 import express from 'express';
+import mongoose from 'mongoose';
 import morgan from 'morgan';
 import { orderRoutes } from './api/routes/orders.js';
 import { productRoutes } from "./api/routes/products.js";
 
 
 const app = express();
-
+mongoose.connect("");
 
 
 // these middlewares only belong before the routes
