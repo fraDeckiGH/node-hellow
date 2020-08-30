@@ -1,0 +1,7 @@
+{
+	"env": {
+		"MONGO_ATLAS__DB_NAME": "node-rest-shop",
+		"MONGO_ATLAS__PSW": "hBe4kxUntWKCq2Hu",
+		"MONGO_ATLAS__USER": "fdc-dbUser"
+	}
+}

@@ -6,7 +6,33 @@ import { productRoutes } from "./api/routes/products.js";
 
 
 const app = express();
-mongoose.connect("");
+
+
+// =======================================================================
+// * db connection: connecting this app to MongoDB Atlas's cluster
+// option chosen: mongoDB's native drivers
+
+(async function() {
+	try {
+		await mongoose.connect(
+			"mongodb+srv://" + process.env.MONGO_ATLAS__USER + ":" + 
+			process.env.MONGO_ATLAS__PSW + "@" + 
+			process.env.MONGO_ATLAS__DB_NAME + ".xf24j.mongodb.net/" + 
+			process.env.MONGO_ATLAS__DB_NAME + "?retryWrites=true&w=majority",
+			{ 
+				useNewUrlParser: true, 
+				useUnifiedTopology: true
+			}
+		);
+		// console.log("DB connected to the server");
+	} catch (e) {
+		console.error(e);
+	}
+}());
+
+// END db connection
+// =======================================================================
+
 
 
 // these middlewares only belong before the routes
@@ -25,8 +51,8 @@ app.use(
 // app.use(morgan("dev"));
 
 
-// explained in e05p2 (2nd part)
-// Parsing the Body & Handling CORS | Creating a REST API with Node.js
+// explained in e05p2 (2nd part): 
+// "Parsing the Body & Handling CORS | Creating a REST API with Node.js"
 // https://www.youtube.com/watch?v=zoSJ3bNGPp0&list=PL55RiY5tL51q4D-B63KBnygU6opNPFk_q&index=6&t=0s
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
