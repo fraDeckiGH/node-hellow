@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 
-/* interface IProduct extends mongoose.Document {
+/* export  */interface IProduct extends mongoose.Document {
   _id: mongoose.Schema.Types.ObjectId,
 	
 	name: {
@@ -14,7 +14,7 @@ import mongoose from "mongoose";
 		required: true,
 		type: Number,
 	},
-} */
+}
 
 
 const productSchema = new mongoose.Schema({
@@ -34,7 +34,7 @@ const productSchema = new mongoose.Schema({
 
 
 // export default mongoose.model('Product', productSchema);
-const Product = mongoose.model/* <IProduct> */('Product', productSchema);
+const Product = mongoose.model<IProduct>('Product', productSchema);
 export { Product };
 
 

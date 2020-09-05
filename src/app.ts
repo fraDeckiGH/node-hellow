@@ -1,11 +1,12 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
-import { orderRoutes } from './api/routes/orders.js';
-import { productRoutes } from "./api/routes/products.js";
+import { orderRoutes } from './api/routes/orders';
+import { productRoutes } from "./api/routes/products";
 
 
-const app = express();
+// const app = express();
+const app: express.Application = express();
 
 
 // =======================================================================
@@ -15,10 +16,10 @@ const app = express();
 (async function() {
 	try {
 		await mongoose.connect(
-			"mongodb+srv://" + process.env.MONGO_ATLAS__USER + ":" + 
-			process.env.MONGO_ATLAS__PSW + "@" + 
-			process.env.MONGO_ATLAS__DB_NAME + ".xf24j.mongodb.net/" + 
-			process.env.MONGO_ATLAS__DB_NAME + "?retryWrites=true&w=majority",
+			"mongodb+srv://" + process.env.DB_USER_USER + ":" + 
+			process.env.DB_USER_PSW + "@" + 
+			process.env.DB_NAME + ".xf24j.mongodb.net/" + 
+			process.env.DB_NAME + "?retryWrites=true&w=majority",
 			{ 
 				useNewUrlParser: true, 
 				useUnifiedTopology: true
@@ -83,14 +84,14 @@ app.use("/orders", orderRoutes);
 
 
 
-
 // =======================================================================
 // error handling
 
 app.use((req, res, next) => {
 	const error = new Error("route not found!");
 	
-	error["status"] = 404;
+	// error["status"] = 404;
+	(error as any).status = 404;
 	
 	// concludes the req w/ an error
 	// without this the req doesn't conclude
@@ -118,6 +119,5 @@ app.use((err, req, res, next) => {
 
 
 
-// export default app;
-export { app };
+export default app;
 

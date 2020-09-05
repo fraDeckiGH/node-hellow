@@ -1,24 +1,19 @@
-
+ 
 followed tutorial: 
 https://github.com/academind/node-restful-api-tutorial
 https://www.youtube.com/playlist?list=PL55RiY5tL51q4D-B63KBnygU6opNPFk_q
 
 
 
--- how to run this server --
-
-node server.js (default)
-
-
-using scripts (see: package.json):
+-- run project --
 
 npm start
 
 
 
+-- TODO --
 
-
-
+lesson 08 finished need to apply changes tho
 
 
 

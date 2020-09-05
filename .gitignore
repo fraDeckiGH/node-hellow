@@ -117,15 +117,12 @@ dist
 
 
 
-
-
-
-
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode
 
 ### VisualStudioCode ###
 .vscode/*
+# edited by fdc
 # !.vscode/settings.json
 # !.vscode/tasks.json
 # !.vscode/launch.json
@@ -137,6 +134,21 @@ dist
 .history
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode
+
+
+
+
+
+
+# added by fdc:
+
+dist/
+
+
+
+
+
+
 
 
 

@@ -1,8 +1,6 @@
-// HACK remove the need for @ts-nocheck
-// @ts-nocheck
 import express from 'express';
 import mongoose from 'mongoose';
-import { Product } from '../models/product.js';
+import { Product } from '../models/product';
 
 
 const router = express.Router();
@@ -10,9 +8,9 @@ const router = express.Router();
 
 
 router.delete("/:id", (req, res, next) => {
-	// const id = req.params.id;
+	const id: unknown = req.params.id;
 	
-  Product.remove({ _id: req.params.id })
+  Product.remove({ _id: id })
     .exec()
     .then(result => {
       res.status(200).json({
@@ -20,9 +18,9 @@ router.delete("/:id", (req, res, next) => {
         request: {
           type: 'POST',
           url: 'http://localhost:3000/products',
-          body: { 
-            name: 'String', 
-            price: 'Number' 
+          body: {
+            name: 'String',
+            price: 'Number'
           }
         }
       });
@@ -104,21 +102,11 @@ router.get("/:id", (req, res, next) => {
 
 
 router.patch("/:id", (req, res, next) => {
-	// const id = req.params.id;
+	const id: unknown = req.params.id;
 	// console.log("req.body", req.body);
 	
-	// DOESN'T WORK
-	/* const updateOps = {};
-	
-  for (const ops of req.body) {
-    console.log("ops", ops);
-		updateOps[ops.propName] = ops.value;
-		
-	}
-	console.log("updateOps", updateOps); */
-	
   Product.update(
-			{ _id: req.params.id }, 
+			{ _id: id }, 
 			{ $set: req.body }
 		)
 		.exec()
