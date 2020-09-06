@@ -13,8 +13,17 @@ npm start
 
 -- TODO --
 
+test other backtick extensions
+'__v' field still present in POST
+
 lesson 08 finished need to apply changes tho
 
+
+-- improvments --
+
+routes: async await instead of then
+res.json: see other types
+typegoose?
 
 
 

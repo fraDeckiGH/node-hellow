@@ -1,12 +1,13 @@
-import express from 'express';
+import express, { Application, NextFunction, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
 import { orderRoutes } from './api/routes/orders';
 import { productRoutes } from "./api/routes/products";
 
 
-// const app = express();
-const app: express.Application = express();
+const app: /* express. */Application = express();
+export default app;
+
 
 
 // =======================================================================
@@ -100,11 +101,12 @@ app.use((req, res, next) => {
 
 
 // catch errors thrown from anywhere else.
-// e.g. failed db operations, normal errors in this code...
-app.use((err, req, res, next) => {
+// e.g. failed db operations, normal errors in the code of this app...
+app.use((err: Error, req: Request, 
+		res: Response, next: NextFunction) => {
 	console.error("err.stack", err.stack);
 	
-	res.status(err.status || 500);
+	res.status((err as any).status || 500);
 	
 	res.json({
 		error: {
@@ -119,5 +121,5 @@ app.use((err, req, res, next) => {
 
 
 
-export default app;
+
 

@@ -1,32 +1,35 @@
-import express from 'express';
-import mongoose from 'mongoose';
+import express, { Router } from 'express';
+import mongoose, { Document } from 'mongoose';
 import { Product } from '../models/product';
 
 
-const router = express.Router();
+const router: Router = express.Router();
+export { router as productRoutes };
 
 
 
 router.delete("/:id", (req, res, next) => {
-	const id: unknown = req.params.id;
+	// const { id } = req.params;
 	
-  Product.remove({ _id: id })
+  Product.remove({ _id: req.params.id })
     .exec()
-    .then(result => {
+    .then(resp => {
       res.status(200).json({
-        message: 'Product deleted',
-        request: {
+        message: 'Doc deleted',
+        response: resp,
+        /* request: {
           type: 'POST',
           url: 'http://localhost:3000/products',
           body: {
             name: 'String',
             price: 'Number'
           }
-        }
+        } */
       });
     })
     .catch(err => {
       console.log(err);
+      
       res.status(500).json({
         error: err
       });
@@ -36,25 +39,41 @@ router.delete("/:id", (req, res, next) => {
 
 router.get("/", (req, res, next) => {
   Product.find()
-    .select("_id name price")
+    // .select("_id name price")
     .exec()
-    .then(docs => {
-			const response = {
+    .then((docs: Document[]) => {
+      const count = docs.length;
+      
+      // ? test other backtick extension
+      console.log(
+        "docs count " + count + "\n", 
+        docs
+      );
+      
+      // console.log(
+      //   `docs count ${count}\n`, 
+      //   docs
+      // );
+      
+			/* const resp = {
         count: docs.length,
-        products: docs.map(doc => {
+        docs: docs.map(doc => {
           return {
+            _id: doc._id,
             name: doc.name,
             price: doc.price,
-            _id: doc._id,
-            request: {
-              type: "GET",
-              url: "http://localhost:3000/products/" + doc._id
-            }
+            // request: {
+            //   type: "GET",
+            //   url: "http://localhost:3000/products/" + doc._id
+            // }
           };
         })
-      };
+      }; */
 			// if (docs.length >= 0) {
-      res.status(200).json(response);
+      res.status(200).json({
+        count: count,
+        docs: docs
+      });
 			// } else {
 			// 		res.status(404).json({
 			// 				message: 'No entries found'
@@ -63,6 +82,7 @@ router.get("/", (req, res, next) => {
     })
     .catch(err => {
       console.log(err);
+      
       res.status(500).json({
         error: err
       });
@@ -71,29 +91,34 @@ router.get("/", (req, res, next) => {
 
 
 router.get("/:id", (req, res, next) => {
-	// const id = req.params.id;
+	// const { id } = req.params;
 	
   Product.findById(req.params.id)
-    .select('_id name price')
+    // .select('_id name price')
+    // .select('name price') // doesn't work o.o
+    // .select("-__v")
     .exec()
-    .then(doc => {
-      console.log("From database", doc);
+    .then((doc: Document | null) => {
+      console.log(doc);
+      
       if (doc) {
-        res.status(200).json({
-          product: doc,
-          request: {
-              type: 'GET',
-              url: 'http://localhost:3000/products'
-          }
-      });
+        /* res.status(200).json({
+          doc: doc,
+          // request: {
+          //     type: 'GET',
+          //     url: 'http://localhost:3000/products'
+          // }
+        }); */
+        res.status(200).json(doc);
       } else {
-        res
-          .status(404)
-          .json({ message: "No valid entry found for provided ID" });
+        res.status(404).json({ 
+          message: "No valid entry found for provided ID" 
+        });
       }
     })
     .catch(err => {
       console.log(err);
+      
       res.status(500).json({ 
 				error: err
 			});
@@ -102,26 +127,29 @@ router.get("/:id", (req, res, next) => {
 
 
 router.patch("/:id", (req, res, next) => {
-	const id: unknown = req.params.id;
+  // const id: string = req.params.id;
 	// console.log("req.body", req.body);
 	
   Product.update(
-			{ _id: id }, 
+			{ _id: req.params.id }, 
 			{ $set: req.body }
 		)
 		.exec()
-    .then(result => {
-      console.log(result);
+    .then((resp) => {
+      console.log(resp);
+      
       res.status(200).json({
-        message: 'Product updated',
-        request: {
+        message: 'Doc updated',
+        response: resp,
+        /* request: {
           type: 'GET',
           url: 'http://localhost:3000/products/' + id
-        }
+        } */
       });
     })
     .catch(err => {
       console.log(err);
+      
       res.status(500).json({
         error: err
       });
@@ -130,33 +158,38 @@ router.patch("/:id", (req, res, next) => {
 
 
 router.post("/", (req, res, next) => {
-	const { body } = req;
+	// const { body } = req;
 	// console.log("body", body)
 	
 	const product = new Product({
     _id: new mongoose.Types.ObjectId(),
-		name: body.name,
-		price: body.price
+    ...req.body
+		// name: body.name,
+		// price: body.price
 	});
 	
 	product.save()
-    .then(result => {
-      console.log(result);
+    .then((doc: Document) => {
+      console.log("doc", doc);
+      console.log("product", product);
+      
       res.status(201).json({
-        message: "Created product successfully",
-        createdProduct: {
-            name: result.name,
-            price: result.price,
-            _id: result._id,
-            request: {
-                type: 'GET',
-                url: "http://localhost:3000/products/" + result._id
-            }
-        }
+        message: "Doc created",
+        doc: doc,
+        /* {
+          _id: doc._id,
+          name: doc.name,
+          price: doc.price,
+          // request: {
+          //     type: 'GET',
+          //     url: "http://localhost:3000/products/" + result._id
+          // }
+        } */
       });
     })
     .catch(err => {
       console.log(err);
+      
       res.status(500).json({
         error: err
       });
@@ -166,7 +199,7 @@ router.post("/", (req, res, next) => {
 
 
 
-export { router as productRoutes };
+
 
 
 
