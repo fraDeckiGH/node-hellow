@@ -40,7 +40,9 @@ export default app;
 // these middlewares only belong before the routes
 
 app.use(
-	express.json(), 
+	// bodyParser
+	// what we'll be able to find in APIs' req.body
+	express.json(),
 	express.urlencoded({ extended: false }),
 	
 	// morgan needs to intercept api requests to work
@@ -64,12 +66,12 @@ app.use((req, res, next) => {
 	);
 	
   if (req.method === 'OPTIONS') {
-      res.header(
-				'Access-Control-Allow-Methods', 
-				'PUT, POST, PATCH, DELETE, GET'
-			);
-			
-      return res.status(200).json({});
+		res.header(
+			'Access-Control-Allow-Methods', 
+			'PUT, POST, PATCH, DELETE, GET'
+		);
+		
+		return res.status(200).json({});
 	}
 	
   next();
@@ -109,9 +111,7 @@ app.use((err: Error, req: Request,
 	res.status((err as any).status || 500);
 	
 	res.json({
-		error: {
-			message: err.message
-		}
+		error: err.message
 	});
 });
 
