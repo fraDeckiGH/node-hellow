@@ -90,6 +90,8 @@ router.get("/:id", async (req, res, next) => {
 
 router.patch("/:id", async (req, res, next) => {
   
+  delete req.body._id;
+  
   try {
     // https://mongoosejs.com/docs/api/model.html#model_Model.findByIdAndUpdate
     const doc: Document | null = 
