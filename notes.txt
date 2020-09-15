@@ -19,10 +19,6 @@ lesson 08 finished need to apply changes tho
 -- improvements --
 
 catch block in a func
-
-already deleted doc is deletable (gives a slightly diff resp ofc)
-patch lets edit non-existent doc (gives a slightly diff resp ofc)
-
 typegoose?
 
 

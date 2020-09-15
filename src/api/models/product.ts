@@ -25,7 +25,7 @@ const productSchema = new /* mongoose. */Schema({
 	// 	type: Number,
 	// },
 	
-	_id: /* mongoose. */Schema.Types.ObjectId,
+	// _id: /* mongoose. */Schema.Types.ObjectId,
 	
 	name: {
 		required: true,
