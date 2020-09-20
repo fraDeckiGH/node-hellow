@@ -18,6 +18,7 @@ lesson 08 finished need to apply changes tho
 
 -- improvements --
 
+generics 101 (ben awad)
 typegoose?
 
 

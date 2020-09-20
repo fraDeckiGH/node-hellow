@@ -22,7 +22,7 @@ export default app;
 			process.env.DB_NAME + ".xf24j.mongodb.net/" + 
 			process.env.DB_NAME + "?retryWrites=true&w=majority",
 			{ 
-				useNewUrlParser: true, 
+				useNewUrlParser: true,
 				useUnifiedTopology: true
 			}
 		);
