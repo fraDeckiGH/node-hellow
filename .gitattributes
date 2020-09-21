@@ -1,0 +1,49 @@
+# Resolving Git line ending issues in containers 
+# (resulting in many modified files)
+# https://code.visualstudio.com/docs/remote/troubleshooting#_resolving-git-line-ending-issues-in-containers-resulting-in-many-modified-files
+
+
+# * text=auto eol=lf
+# *.{cmd,[cC][mM][dD]} text eol=crlf
+# *.{bat,[bB][aA][tT]} text eol=crlf
+
+
+
+
+# I like github's template more
+
+
+# Configuring Git to handle line endings
+# https://docs.github.com/en/github/using-git/configuring-git-to-handle-line-endings
+
+
+# # Set the default behavior, in case people don't have core.autocrlf set.
+# * text=auto
+
+# # Explicitly declare text files you want to always be normalized and converted
+# # to native line endings on checkout.
+# *.c text
+# *.h text
+
+# # Declare files that will always have CRLF line endings on checkout.
+# *.sln text eol=crlf
+
+# # Denote all files that are truly binary and should not be modified.
+# *.png binary
+# *.jpg binary
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
