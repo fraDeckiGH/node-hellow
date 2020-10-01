@@ -1,10 +1,10 @@
-import express, { Router } from 'express';
+import { Router } from 'express';
 import { Document } from 'mongoose';
 import { apiError } from '../../util';
 import { Product } from '../models/product';
 
 
-const router: Router = express/* .Router */();
+const router: Router = /* express. */Router();
 export { router as productRoutes };
 
 
@@ -126,7 +126,7 @@ router.patch("/:id", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
 	
-	// const product: Document = new Product(req.body);
+	// const doc: Document = new Product(req.body);
   
   try {
     const doc: Document = 

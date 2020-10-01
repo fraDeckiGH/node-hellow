@@ -1,7 +1,7 @@
-import mongoose, { Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 
 
-/* export  *//* interface IProduct extends mongoose.Document {
+/* export  *//* interface IModel extends mongoose.Document {
   // _id: string,
 	
 	name: {
@@ -17,7 +17,7 @@ import mongoose, { Schema } from "mongoose";
 } */
 
 
-const productSchema = new /* mongoose. */Schema({
+const schema = new /* mongoose. */Schema({
 	// __v: {
 	// 	// doesn't work when 'type' is not set
 	// 	// ? does this break sth?
@@ -57,7 +57,7 @@ const productSchema = new /* mongoose. */Schema({
 
 
 export const Product = 
-	mongoose.model/* <IProduct> */('Product', productSchema);
+	/* mongoose. */model/* <IModel> */('Product', schema);
 
 // export { Product };
 
