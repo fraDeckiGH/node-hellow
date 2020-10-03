@@ -16,10 +16,12 @@ npm start
 
 =================================================
 
+
 -- TODO --
 
-sort Order fields alphabetically
-watch lesson 09
+test app w/out devDeps
+watch lesson 10
+
 
 
 -- improvements --
@@ -28,7 +30,10 @@ typegoose?
 
 
 
+-- not a dev dependency? --
 
+dotenv
+mongoose-autopopulate
 
 
 
