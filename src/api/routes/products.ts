@@ -1,11 +1,57 @@
-import { Router } from 'express';
+import { Request, Router } from 'express';
 import { Document } from 'mongoose';
+import multer from 'multer';
 import { apiError } from '../../util';
 import { Product } from '../models/product';
 
 
-const router: Router = /* express. */Router();
+const router: Router = Router();
 export { router as productRoutes };
+
+
+
+// -------------------------------------
+// e10  Uploading an Image 
+// this code is close-minded =(
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads');
+  },
+  filename: (req, file, cb) => {
+    // ENOENT: no such file or directory
+    // (Windows error, colon ':' is not accepted in filename)
+    // fix found in comment section
+    // cb(null, new Date().toISOString() + file.originalname);
+    cb(null, Date.now() + file.originalname);
+  }
+});
+
+const fileFilter = (req: Request, 
+  file: Express.Multer.File, cb: Function) => {
+  console.log("qui", file);
+  
+  if (file.mimetype == 'image/jpeg' || file.mimetype == 'image/png') {
+    // accept file
+    cb(null, true);
+  } else {
+    // reject file (no error, just ignore it)
+    // error is "null"
+    cb(null, false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    // 5 MB (according to Max)
+    fileSize: 1024 * 1024 * 5
+  },
+  fileFilter: fileFilter
+});
+
+// END Uploading an Image
+// -------------------------------------
 
 
 
@@ -124,13 +170,19 @@ router.patch("/:id", async (req, res, next) => {
 });
 
 
-router.post("/", async (req, res, next) => {
-	
+router.post("/", upload.single("img"),
+  async (req, res, next) => {
+  
+  const { body, file } = req;
+  console.log("req.file", file);
+  
 	// const doc: Document = new Product(req.body);
   
   try {
-    const doc: Document = 
-      await new Product(req.body).save();
+    const doc: Document = await new Product({
+      ...body,
+      img: file && file.path
+    }).save();
     console.log("created doc", doc);
     
     res.status(201).json({

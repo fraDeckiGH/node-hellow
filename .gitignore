@@ -140,10 +140,14 @@ dist
 
 
 
+
 # added by fdc:
+
 
 dist/
 
+# local files
+uploads/
 
 
 

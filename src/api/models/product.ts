@@ -1,23 +1,23 @@
 import { model, Schema } from "mongoose";
 
 
-/* export  *//* interface IModel extends mongoose.Document {
-  // _id: string,
+// export interface IModel extends mongoose.Document {
+//   // _id: string,
 	
-	name: {
-		required: true,
-		type: String,
-    // unique: true,
-	},
+// 	name: {
+// 		required: true,
+// 		type: String,
+//     // unique: true,
+// 	},
 	
-	price: {
-		required: true,
-		type: Number,
-	},
-} */
+// 	price: {
+// 		required: true,
+// 		type: Number,
+// 	},
+// }
 
 
-const schema = new /* mongoose. */Schema({
+const schema = new Schema({
 	// __v: {
 	// 	// doesn't work when 'type' is not set
 	// 	// ? does this break sth?
@@ -26,6 +26,10 @@ const schema = new /* mongoose. */Schema({
 	// },
 	
 	// _id: /* mongoose. */Schema.Types.ObjectId,
+	
+	img: {
+		type: String,
+	},
 	
 	name: {
 		required: true,

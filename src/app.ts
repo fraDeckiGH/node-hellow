@@ -1,4 +1,4 @@
-import express, { Application, NextFunction, Request, Response } from 'express';
+import express, { Application, json, NextFunction, Request, Response, static as e_static, urlencoded } from 'express';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
 import { orderRoutes } from './api/routes/orders';
@@ -40,19 +40,21 @@ export default app;
 // these middlewares only belong before the routes
 
 app.use(
+	// multer (req.file) (e10  Uploading an Image)
+	// to be specific: make "uploads" dir accessible by URL
+	// eg  http://localhost:3000/uploads/fileName.ext  or 
+	// http://localhost:3000/uploads\\fileName.ext
+	'/uploads', e_static('uploads'),
+	
 	// bodyParser
 	// what we'll be able to find in APIs' req.body
-	express.json(),
-	express.urlencoded({ extended: false }),
+	json(),
+	urlencoded({ extended: false }),
 	
 	// morgan needs to intercept api requests to work
 	// hence is "used" before the routes
 	morgan("dev")
 );
-
-// morgan needs to intercept api requests to work
-// hence is "used" before the routes
-// app.use(morgan("dev"));
 
 
 // explained in e05p2 (2nd part): 
