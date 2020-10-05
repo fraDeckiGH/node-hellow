@@ -148,6 +148,7 @@ dist/
 
 # local files
 uploads/*
+!uploads/readme.txt
 
 
 
