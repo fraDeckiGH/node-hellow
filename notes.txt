@@ -9,10 +9,10 @@ node v14.12.0
 
 -- run project --
 
-build js and run
+build js and run:
 npm start
 
-run
+run ts:
 npm test
 
 
@@ -23,7 +23,7 @@ npm test
 
 -- TODO --
 
-watch lesson 11
+watch lesson 12
 
 
 

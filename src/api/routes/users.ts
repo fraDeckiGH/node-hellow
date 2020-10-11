@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import { Document } from 'mongoose';
-import { apiError, ResponseId } from '../../util';
-import { Order } from '../models/order';
-import { Product } from '../models/product';
+import bcrypt from 'bcrypt';
+import { apiError, REGEX, ResponseId } from '../../util';
+import { User } from '../models/user';
 
 
 const router: Router = Router();
-export { router as orderRoutes };
+export { router as userRoutes };
 
 
 
@@ -16,13 +16,13 @@ router.delete("/:id", async (req, res, next) => {
   try {
     // https://mongoosejs.com/docs/api/model.html#model_Model.findByIdAndDelete
     const doc: Document | null = 
-      await Order.findByIdAndDelete(req.params.id);
+      await User.findByIdAndDelete(req.params.id);
     
     if (doc) {
       console.log("deleted doc", doc);
       
       res.status(200).json({
-        doc: doc,
+				doc: doc,
         id: ResponseId.DocDeleted,
       });
     } else {
@@ -40,7 +40,7 @@ router.delete("/:id", async (req, res, next) => {
 router.get("/", async (req, res, next) => {
   
   try {
-    const docs: Document[] = await Order.find();
+		const docs: Document[] = await User.find();
     console.log(
       `docs count ${docs.length}\n`, 
       docs
@@ -62,10 +62,10 @@ router.get("/:id", async (req, res, next) => {
   
   try {
     const doc: Document | null = 
-      await Order.findById(req.params.id);
+      await User.findById(req.params.id);
     
     if (doc) {
-      console.log(doc);
+			console.log(doc);
       res.status(200).json({
 				doc: doc,
 				id: ResponseId.DocRetrieved,
@@ -82,35 +82,49 @@ router.get("/:id", async (req, res, next) => {
 });
 
 
-router.post("/", async (req, res, next) => {
+router.post("/signup", async (req, res, next) => {
 	
 	const { body } = req;
-  
-  try {
-		const productDoc: Document | null = 
-			await Product.findById(body.product);
+	
+	if (!(body.email).match(REGEX.EMAIL)) {
+		res.status(422).json({
+			id: "invalid-email",
+		});
 		
-		if (productDoc) {
-			const doc: Document = 
-				await new Order(body).save();
-			console.log("created doc", doc);
+		return;
+	}
+	
+  try {
+		const userDoc: Document | null = 
+			await User.findOne({ email: body.email });
+		
+		if (userDoc) {
+			res.status(409).json({
+				id: ResponseId.DocAlreadyExists,
+			});
 			
-			res.status(201).json({
-				doc: doc,
-				id: ResponseId.DocCreated,
-			});
-		} else {
-			res.status(404).json({ 
-				id: "product-not-found", 
-			});
+			return;
 		}
+		
+		const encrypted: string = 
+			await bcrypt.hash(body.password, 10);
+		
+		const doc: Document = await new User({
+			...body,
+			password: encrypted,
+		}).save();
+		console.log("created doc", doc);
+		
+		res.status(201).json({
+			doc: doc,
+			id: ResponseId.DocCreated,
+		});
+		
   } catch (e) {
     apiError(e, res);
   }
   
 });
-
-
 
 
 

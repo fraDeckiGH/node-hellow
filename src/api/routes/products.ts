@@ -1,7 +1,7 @@
 import { Request, Router } from 'express';
 import { Document } from 'mongoose';
 import multer from 'multer';
-import { apiError } from '../../util';
+import { apiError, ResponseId } from '../../util';
 import { Product } from '../models/product';
 
 
@@ -11,8 +11,7 @@ export { router as productRoutes };
 
 
 // -------------------------------------
-// e10  Uploading an Image 
-// this code is close-minded =(
+// image upload (e10)
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -50,9 +49,8 @@ const upload = multer({
   fileFilter: fileFilter
 });
 
-// END Uploading an Image
+// END image upload
 // -------------------------------------
-
 
 
 
@@ -67,12 +65,12 @@ router.delete("/:id", async (req, res, next) => {
       console.log("deleted doc", doc);
       
       res.status(200).json({
-        message: "Doc deleted",
-        doc: doc
+				doc: doc,
+        id: ResponseId.DocDeleted,
       });
     } else {
       res.status(404).json({ 
-        message: "Doc not found" 
+        id: ResponseId.DocNotFound,
       });
     }
   } catch (e) {
@@ -93,7 +91,8 @@ router.get("/", async (req, res, next) => {
     
     res.status(200).json({
       count: docs.length,
-      docs: docs
+			id: ResponseId.DocsRetrieved,
+			docs: docs,
     });
   } catch (e) {
     apiError(e, res);
@@ -110,10 +109,13 @@ router.get("/:id", async (req, res, next) => {
     
     if (doc) {
       console.log(doc);
-      res.status(200).json(doc);
+      res.status(200).json({
+				doc: doc,
+				id: ResponseId.DocRetrieved,
+			});
     } else {
       res.status(404).json({ 
-        message: "Doc not found" 
+        id: ResponseId.DocNotFound,
       });
     }
   } catch (e) {
@@ -125,7 +127,9 @@ router.get("/:id", async (req, res, next) => {
 
 router.patch("/:id", async (req, res, next) => {
   
-  delete req.body._id;
+  const { body } = req;
+  
+  delete body._id;
   
   try {
     // https://mongoosejs.com/docs/api/model.html#model_Model.findByIdAndUpdate
@@ -136,12 +140,11 @@ router.patch("/:id", async (req, res, next) => {
         // { $set: req.body }
         // All top level update keys which are not atomic 
         // operation names are treated as set operations
-        req.body,
+        body,
         
         { // options:
           
-          // if true, return the modified document rather than 
-          // the original. defaults to false (changed in 4.0)
+          // return the modified doc rather than the original
           // new: true,
           
           // https://mongoosejs.com/docs/api/query.html#query_Query-mongooseOptions
@@ -154,13 +157,13 @@ router.patch("/:id", async (req, res, next) => {
       // console.log("updated doc", doc);
       
       res.status(200).json({
-        message: 'Doc updated',
-        // initialDoc: doc,
-        doc: doc,
+        // doc: doc,
+        initialDoc: doc,
+        id: ResponseId.DocUpdated,
       });
     } else {
       res.status(404).json({ 
-        message: "Doc not found" 
+        id: ResponseId.DocNotFound, 
       });
     }
   } catch (e) {
@@ -176,18 +179,16 @@ router.post("/", upload.single("img"),
   const { body, file } = req;
   console.log("req.file", file);
   
-	// const doc: Document = new Product(req.body);
-  
   try {
     const doc: Document = await new Product({
       ...body,
-      img: file && file.path
+      img: file && file.path,
     }).save();
     console.log("created doc", doc);
     
     res.status(201).json({
-      message: "Doc created",
       doc: doc,
+      id: ResponseId.DocCreated,
     });
   } catch (e) {
     apiError(e, res);

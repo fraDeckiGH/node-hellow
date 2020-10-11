@@ -1,11 +1,12 @@
-import express, { Application, json, NextFunction, Request, Response, static as e_static, urlencoded } from 'express';
+import express, { Application, json, NextFunction, Request, Response, urlencoded } from 'express';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
 import { orderRoutes } from './api/routes/orders';
 import { productRoutes } from "./api/routes/products";
+import { userRoutes } from "./api/routes/users";
 
 
-const app: /* express. */Application = express();
+const app: Application = express();
 export default app;
 
 
@@ -22,8 +23,9 @@ export default app;
 			process.env.DB_NAME + ".xf24j.mongodb.net/" + 
 			process.env.DB_NAME + "?retryWrites=true&w=majority",
 			{ 
+				useCreateIndex: true,
 				useNewUrlParser: true,
-				useUnifiedTopology: true
+				useUnifiedTopology: true,
 			}
 		);
 		// console.log("DB connected to the server");
@@ -32,34 +34,19 @@ export default app;
 	}
 }());
 
-// END db connection
+
+
 // =======================================================================
+// middlewares (only belong before the routes)
 
-
-
-// these middlewares only belong before the routes
-
+// bodyParser
+// what we'll be able to find in APIs' req.body
 app.use(
-	// multer (req.file) (e10  Uploading an Image)
-	// to be specific: make "uploads" dir accessible by URL
-	// eg  http://localhost:3000/uploads/fileName.ext  or 
-	// http://localhost:3000/uploads\\fileName.ext
-	'/uploads', e_static('uploads'),
-	
-	// bodyParser
-	// what we'll be able to find in APIs' req.body
 	json(),
 	urlencoded({ extended: false }),
-	
-	// morgan needs to intercept api requests to work
-	// hence is "used" before the routes
-	morgan("dev")
 );
 
-
-// explained in e05p2 (2nd part): 
-// "Parsing the Body & Handling CORS | Creating a REST API with Node.js"
-// https://www.youtube.com/watch?v=zoSJ3bNGPp0&list=PL55RiY5tL51q4D-B63KBnygU6opNPFk_q&index=6&t=0s
+// (CORS) e05p2 "Parsing the Body & Handling CORS"
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -73,19 +60,30 @@ app.use((req, res, next) => {
 			'PUT, POST, PATCH, DELETE, GET'
 		);
 		
-		return res.status(200).json({});
+		return res.status(200)/* .json({}) */;
 	}
 	
   next();
 });
 
+// morgan needs to intercept api requests to work
+// hence is "used" before the routes
+app.use(morgan("dev"));
+
+// multer (req.file) (e10  Uploading an Image)
+// to be specific: make "uploads" dir accessible by URL
+// eg  http://localhost:3000/uploads/fileName.ext  or 
+// http://localhost:3000/uploads\\fileName.ext
+app.use('/uploads', express.static('uploads'));
 
 
-// ---------------------- Routes ----------------------
-// routes which should handle requests
 
-app.use("/products", productRoutes);
+// =======================================================================
+// routes - which handle requests
+
 app.use("/orders", orderRoutes);
+app.use("/products", productRoutes);
+app.use("/users", userRoutes);
 
 
 
@@ -103,7 +101,6 @@ app.use((req, res, next) => {
 	next(error);
 });
 
-
 // catch errors thrown from anywhere else.
 // e.g. failed db operations, normal errors in the code of this app...
 app.use((err: Error, req: Request, 
@@ -117,8 +114,10 @@ app.use((err: Error, req: Request,
 	});
 });
 
-// END error handling
-// =======================================================================
+
+
+
+
 
 
 

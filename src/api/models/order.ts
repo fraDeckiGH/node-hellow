@@ -24,7 +24,6 @@ const schema = new Schema({
 	// e.g API response
 	.set('toJSON', {
 		transform: (undefined, ret) => sortSchemaKeys(ret),
-		// useProjection: true,
 		versionKey: false
 	})
 
@@ -32,7 +31,6 @@ const schema = new Schema({
 	// e.g console.log
 	.set('toObject', {
 		transform: (undefined, ret) => sortSchemaKeys(ret),
-		// useProjection: true,
 		versionKey: false
 	});
 
