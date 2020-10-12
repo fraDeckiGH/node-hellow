@@ -18,7 +18,7 @@ export enum ResponseId {
 	DocRetrieved = "doc-retrieved",
 	DocsRetrieved = "docs-retrieved",
 	DocUpdated = "doc-updated",
-};
+}
 
 
 export function apiError(e: any, res: Response) {
@@ -27,7 +27,7 @@ export function apiError(e: any, res: Response) {
 	res.status(500).json({
 		error: e
 	});
-};
+}
 
 
 export function sortSchemaKeys(ret: any) {
@@ -47,7 +47,7 @@ export function sortSchemaKeys(ret: any) {
 		});
 	
 	return newObj;
-};
+}
 
 
 

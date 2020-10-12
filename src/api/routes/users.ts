@@ -1,8 +1,9 @@
 import { Router } from 'express';
 import { Document } from 'mongoose';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import { apiError, REGEX, ResponseId } from '../../util';
-import { User } from '../models/user';
+import { IUser, User } from '../models/user';
 
 
 const router: Router = Router();
@@ -82,28 +83,71 @@ router.get("/:id", async (req, res, next) => {
 });
 
 
+router.post("/login", async (req, res, next) => {
+	
+	const { body } = req;
+	
+	try {
+		const user: IUser | null = 
+			await User.findOne({ email: body.email });
+		
+		if (!user) {
+			return res.status(401).json({
+				id: "unauthorized",
+			});
+    }
+    
+    
+    const same: boolean = 
+      await bcrypt.compare(body.password, user.password);
+    
+    if (!same) {
+      return res.status(401).json({
+				id: "unauthorized",
+			});
+    }
+    
+    
+    delete user.password;
+    
+    const token: string = jwt.sign(
+      { ...user },
+      process.env.JWT_KEY + "",
+      {
+        expiresIn: "1h"
+      }
+    );
+    
+    res.status(200).json({
+      id: "authorized",
+      token: token,
+    });
+    
+  } catch (e) {
+    apiError(e, res);
+  }
+  
+});
+
+
 router.post("/signup", async (req, res, next) => {
 	
 	const { body } = req;
 	
 	if (!(body.email).match(REGEX.EMAIL)) {
-		res.status(422).json({
+		return res.status(422).json({
 			id: "invalid-email",
 		});
-		
-		return;
 	}
 	
   try {
-		const userDoc: Document | null = 
+		const user: Document | null = 
 			await User.findOne({ email: body.email });
 		
-		if (userDoc) {
-			res.status(409).json({
+		if (user) {
+			return res.status(409).json({
 				id: ResponseId.DocAlreadyExists,
 			});
-			
-			return;
 		}
 		
 		const encrypted: string = 
@@ -118,8 +162,8 @@ router.post("/signup", async (req, res, next) => {
 		res.status(201).json({
 			doc: doc,
 			id: ResponseId.DocCreated,
-		});
-		
+    });
+    
   } catch (e) {
     apiError(e, res);
   }

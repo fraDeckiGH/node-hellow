@@ -87,10 +87,10 @@ router.post("/", async (req, res, next) => {
 	const { body } = req;
   
   try {
-		const productDoc: Document | null = 
+		const product: Document | null = 
 			await Product.findById(body.product);
 		
-		if (productDoc) {
+		if (product) {
 			const doc: Document = 
 				await new Order(body).save();
 			console.log("created doc", doc);

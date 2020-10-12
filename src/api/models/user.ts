@@ -1,5 +1,10 @@
-import { model, Schema } from "mongoose";
+import { Document, model, Schema } from "mongoose";
 import { REGEX } from "../../util";
+
+
+export interface IUser extends Document {
+  [key: string]: any;
+}
 
 
 const schema = new Schema({
@@ -31,7 +36,7 @@ const schema = new Schema({
 
 
 
-export const User = model('User', schema);
+export const User = model/* <IUser> */('User', schema);
 
 
 
