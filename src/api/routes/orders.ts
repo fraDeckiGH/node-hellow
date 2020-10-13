@@ -3,6 +3,7 @@ import { Document } from 'mongoose';
 import { apiError, ResponseId } from '../../util';
 import { Order } from '../models/order';
 import { Product } from '../models/product';
+import checkAuth from '../middleware/check-auth';
 
 
 const router: Router = Router();
@@ -11,7 +12,7 @@ export { router as orderRoutes };
 
 
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", checkAuth, async (req, res, next) => {
   
   try {
     // https://mongoosejs.com/docs/api/model.html#model_Model.findByIdAndDelete
@@ -37,7 +38,7 @@ router.delete("/:id", async (req, res, next) => {
 });
 
 
-router.get("/", async (req, res, next) => {
+router.get("/", checkAuth, async (req, res, next) => {
   
   try {
     const docs: Document[] = await Order.find();
@@ -58,7 +59,7 @@ router.get("/", async (req, res, next) => {
 });
 
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", checkAuth, async (req, res, next) => {
   
   try {
     const doc: Document | null = 
@@ -82,7 +83,7 @@ router.get("/:id", async (req, res, next) => {
 });
 
 
-router.post("/", async (req, res, next) => {
+router.post("/", checkAuth, async (req, res, next) => {
 	
 	const { body } = req;
   

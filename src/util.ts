@@ -18,6 +18,7 @@ export enum ResponseId {
 	DocRetrieved = "doc-retrieved",
 	DocsRetrieved = "docs-retrieved",
 	DocUpdated = "doc-updated",
+	Unauthorized = "unauthorized",
 }
 
 
@@ -48,6 +49,16 @@ export function sortSchemaKeys(ret: any) {
 	
 	return newObj;
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

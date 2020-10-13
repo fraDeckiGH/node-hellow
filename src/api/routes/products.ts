@@ -2,6 +2,7 @@ import { Request, Router } from 'express';
 import { Document } from 'mongoose';
 import multer from 'multer';
 import { apiError, ResponseId } from '../../util';
+import checkAuth from '../middleware/check-auth';
 import { Product } from '../models/product';
 
 
@@ -12,6 +13,7 @@ export { router as productRoutes };
 
 // -------------------------------------
 // image upload (e10)
+// TODO export somewhere else
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -54,7 +56,7 @@ const upload = multer({
 
 
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", checkAuth, async (req, res, next) => {
   
   try {
     // https://mongoosejs.com/docs/api/model.html#model_Model.findByIdAndDelete
@@ -125,7 +127,7 @@ router.get("/:id", async (req, res, next) => {
 });
 
 
-router.patch("/:id", async (req, res, next) => {
+router.patch("/:id", checkAuth, async (req, res, next) => {
   
   const { body } = req;
   
@@ -173,7 +175,7 @@ router.patch("/:id", async (req, res, next) => {
 });
 
 
-router.post("/", upload.single("img"),
+router.post("/", checkAuth, upload.single("img"),
   async (req, res, next) => {
   
   const { body, file } = req;

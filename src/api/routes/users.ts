@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { apiError, REGEX, ResponseId } from '../../util';
 import { IUser, User } from '../models/user';
+import checkAuth from '../middleware/check-auth';
 
 
 const router: Router = Router();
@@ -12,7 +13,7 @@ export { router as userRoutes };
 
 
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", checkAuth, async (req, res, next) => {
   
   try {
     // https://mongoosejs.com/docs/api/model.html#model_Model.findByIdAndDelete
@@ -93,7 +94,7 @@ router.post("/login", async (req, res, next) => {
 		
 		if (!user) {
 			return res.status(401).json({
-				id: "unauthorized",
+				id: ResponseId.Unauthorized,
 			});
     }
     
@@ -103,7 +104,7 @@ router.post("/login", async (req, res, next) => {
     
     if (!same) {
       return res.status(401).json({
-				id: "unauthorized",
+				id: ResponseId.Unauthorized,
 			});
     }
     
