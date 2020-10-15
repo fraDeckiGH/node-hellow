@@ -3,12 +3,12 @@ import { Document } from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { apiError, REGEX, ResponseId } from '../../util';
-import { IUser, User } from '../models/user';
+import { IUser, User } from '../model/mUser';
 import checkAuth from '../middleware/check-auth';
 
 
 const router: Router = Router();
-export { router as userRoutes };
+export { router as routerUser };
 
 
 

@@ -22,11 +22,11 @@ export enum ResponseId {
 }
 
 
-export function apiError(e: any, res: Response) {
-	console.error(e);
+export function apiError(err: any, res: Response) {
+	console.error(err);
 	
 	res.status(500).json({
-		error: e
+		error: err
 	});
 }
 

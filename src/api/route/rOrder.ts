@@ -1,13 +1,13 @@
 import { Router } from 'express';
 import { Document } from 'mongoose';
 import { apiError, ResponseId } from '../../util';
-import { Order } from '../models/order';
-import { Product } from '../models/product';
+import { Order } from '../model/mOrder';
+import { Product } from '../model/mProduct';
 import checkAuth from '../middleware/check-auth';
 
 
 const router: Router = Router();
-export { router as orderRoutes };
+export { router as routerOrder };
 
 
 

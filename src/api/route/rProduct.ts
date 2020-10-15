@@ -2,12 +2,13 @@ import { Request, Router } from 'express';
 import { Document } from 'mongoose';
 import multer from 'multer';
 import { apiError, ResponseId } from '../../util';
+import { pp } from '../controller/cProduct';
 import checkAuth from '../middleware/check-auth';
-import { Product } from '../models/product';
+import { Product } from '../model/mProduct';
 
 
 const router: Router = Router();
-export { router as productRoutes };
+export { router as routerProduct };
 
 
 
@@ -197,6 +198,9 @@ router.post("/", checkAuth, upload.single("img"),
   }
   
 });
+
+router.post("/", checkAuth, upload.single("img"),
+  pp);
 
 
 

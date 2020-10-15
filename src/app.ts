@@ -1,9 +1,9 @@
 import express, { Application, json, NextFunction, Request, Response, urlencoded } from 'express';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
-import { orderRoutes } from './api/routes/orders';
-import { productRoutes } from "./api/routes/products";
-import { userRoutes } from "./api/routes/users";
+import { routerOrder } from './api/route/rOrder';
+import { routerProduct } from "./api/route/rProduct";
+import { routerUser } from "./api/route/rUser";
 
 
 const app: Application = express();
@@ -37,7 +37,7 @@ export default app;
 
 
 // =======================================================================
-// middlewares (only belong before the routes)
+// middleware (only belong before the routes)
 
 // bodyParser
 // what we'll be able to find in APIs' req.body
@@ -81,9 +81,9 @@ app.use('/uploads', express.static('uploads'));
 // =======================================================================
 // routes - which handle requests
 
-app.use("/orders", orderRoutes);
-app.use("/products", productRoutes);
-app.use("/users", userRoutes);
+app.use("/order", routerOrder);
+app.use("/product", routerProduct);
+app.use("/user", routerUser);
 
 
 
@@ -91,26 +91,27 @@ app.use("/users", userRoutes);
 // error handling
 
 app.use((req, res, next) => {
-	const error = new Error("route not found!");
-	
-	// error["status"] = 404;
-	(error as any).status = 404;
+	const err = new Error("route not found!");
+	(err as any).status = 404;
 	
 	// concludes the req w/ an error
-	// without this the req doesn't conclude
-	next(error);
+	// w/out this the req doesn't conclude
+	next(err);
 });
 
 // catch errors thrown from anywhere else.
 // e.g. failed db operations, normal errors in the code of this app...
 app.use((err: Error, req: Request, 
-		res: Response, next: NextFunction) => {
+	res: Response, next: NextFunction) => {
+	
 	console.error("err.stack", err.stack);
 	
-	res.status((err as any).status || 500);
-	
-	res.json({
-		error: err.message
+	// res.status((err as any).status || 500);
+	// res.json({
+	// 	error: err.message
+	// });
+	res.status((err as any).status || 500).json({
+		error: err.message,
 	});
 });
 
