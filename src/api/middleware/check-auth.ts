@@ -1,13 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { ResponseId } from "../../util";
+import { makeString, ResponseId } from "../../util";
 
 
 
-export default (req: Request, res: Response, 
-	next: NextFunction) => {
+export default (
+	req: Request, res: Response, next: NextFunction
+) => {
 	
-	console.log("req.headers", req.headers);
+	// console.log("req.headers", req.headers);
 	
 	if (req?.headers?.authorization) {
 		const token: string = 
@@ -15,7 +16,7 @@ export default (req: Request, res: Response,
 		
 		try {
 			// (req as any).userToken = 
-				jwt.verify(token, process.env.JWT_KEY + "");
+				jwt.verify(token, makeString(process.env.JWT_KEY));
 			
 			next();
 		} catch (error) {

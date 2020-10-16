@@ -31,6 +31,11 @@ export function apiError(err: any, res: Response) {
 }
 
 
+export function makeString<T>(val: T) {
+	return val + "";
+}
+
+
 export function sortSchemaKeys(ret: any) {
 	// https://mongoosejs.com/docs/api/document.html#document_Document-toJSON
 	// (scroll a bit to the bottom)
@@ -49,9 +54,6 @@ export function sortSchemaKeys(ret: any) {
 	
 	return newObj;
 }
-
-
-
 
 
 

@@ -94,8 +94,9 @@ app.use((req, res, next) => {
 	const err = new Error("route not found!");
 	(err as any).status = 404;
 	
-	// concludes the req w/ an error
-	// w/out this the req doesn't conclude
+	// pass the error to the next func 
+	// (app.use just below in this case)
+	// w/out this the req never concludes
 	next(err);
 });
 
@@ -106,10 +107,6 @@ app.use((err: Error, req: Request,
 	
 	console.error("err.stack", err.stack);
 	
-	// res.status((err as any).status || 500);
-	// res.json({
-	// 	error: err.message
-	// });
 	res.status((err as any).status || 500).json({
 		error: err.message,
 	});

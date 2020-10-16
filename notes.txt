@@ -29,11 +29,6 @@ run ts:
 
 -- TODO --
 
-test productPost (pp) w/ and w/out hoisting
-test new error handling
-change sortSchemaKeys? (what about apiError?)
-delete really old commits when I didn't have .env file
-
 just look at the code and micro-tasks will come to mind
 (remember: perfectly written codebase does not exist)
 
